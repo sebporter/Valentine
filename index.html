@@ -14,11 +14,26 @@
         <p class="subtitle">I made something for you.</p>
 
         <div class="actions">
-          <a class="btn primary" href="valentine.html">Enter</a>
+          <button id="enterBtn" class="btn primary" type="button">
+            Enter
+          </button>
         </div>
 
         <p class="small">Seb Porter</p>
       </section>
     </main>
+
+    <!-- Background music -->
+    <script src="public/js/music.js"></script>
+    <script>
+      const enterBtn = document.getElementById("enterBtn");
+
+      enterBtn.addEventListener("click", () => {
+        // Start music on first user interaction
+        window.startValentineMusic();
+        // Navigate to next page
+        window.location.href = "valentine.html";
+      });
+    </script>
   </body>
 </html>
