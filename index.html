@@ -4,7 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jasmine ❤️</title>
-    <link rel="stylesheet" href="public/css/style.css" />
+
+    <!-- Cache-bust CSS -->
+    <link rel="stylesheet" href="public/css/style.css?v=2" />
   </head>
 
   <body>
@@ -37,7 +39,7 @@
       <source src="public/audio/music.mp3" type="audio/mpeg" />
     </audio>
 
-    <!-- IMPORTANT: only load app.js (do NOT load music.js as well) -->
-    <script src="public/js/app.js"></script>
+    <!-- Cache-bust app.js (this is the important part) -->
+    <script src="public/js/app.js?v=2"></script>
   </body>
 </html>
