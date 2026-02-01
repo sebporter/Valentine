@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jasmine ❤️</title>
 
-    <!-- cache-bust so updates show immediately -->
-    <link rel="stylesheet" href="public/css/style.css?v=3" />
+    <!-- Cache-busted CSS -->
+    <link rel="stylesheet" href="public/css/style.css?v=1000" />
   </head>
 
   <body>
@@ -16,31 +16,37 @@
 
         <h1 class="title" id="title">Dear Jasmine,</h1>
 
+        <!-- This content is immediately replaced by app.js on load -->
         <p class="message" id="message">
           People say, “If he wanted to, he would.”<br /><br />
           So I built you a website.
         </p>
 
-        <!-- Image shown for frames 1..8 -->
+        <!-- Image container (used for frames 1–8 only) -->
         <div class="photoWrap" id="photoWrap" aria-hidden="true">
           <img class="photo" id="photo" src="" alt="" />
         </div>
 
         <div class="actions" id="actions">
-          <button class="btn primary" id="primaryBtn" type="button">Enter</button>
-          <button class="btn" id="secondaryBtn" type="button">No</button>
+          <button class="btn primary" id="primaryBtn" type="button">
+            Enter
+          </button>
+          <button class="btn" id="secondaryBtn" type="button">
+            No
+          </button>
         </div>
 
         <p class="small" id="small">Seb Porter</p>
       </section>
     </main>
 
-    <!-- Music (starts on Enter click; controlled by app.js) -->
+    <!-- Background music (starts on Enter click, controlled by app.js) -->
     <audio id="bgMusic" preload="auto" loop>
       <source src="public/audio/music.mp3" type="audio/mpeg" />
     </audio>
 
-    <!-- cache-bust app.js so new copy shows -->
-    <script src="public/js/app.js?v=3"></script>
+    <!-- IMPORTANT: only load app.js -->
+    <!-- Cache-busted so new copy + images always show -->
+    <script src="public/js/app.js?v=1000"></script>
   </body>
 </html>
