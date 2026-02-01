@@ -12,8 +12,8 @@ const secondaryBtn = document.getElementById("secondaryBtn");
 
 const music = document.getElementById("bgMusic");
 
-// Change this ANY TIME you re-upload images with the same filenames
-const ASSET_VERSION = "20260201-1";
+// Change this any time you replace images but keep the same filenames
+const ASSET_VERSION = "20260201-2";
 
 let musicStarted = false;
 let step = 0;
@@ -26,6 +26,11 @@ function setMultiline(el, text) {
   });
 }
 
+/*
+  step 0  = landing (no image)
+  step 1–8 = sebjas1.jpg → sebjas8.jpg
+  step 9  = final question (no image) — should show "Yes" + "No"
+*/
 const frames = [
   {
     eyebrow: "For Jasmine",
@@ -38,7 +43,8 @@ const frames = [
   {
     eyebrow: "Brisbane ↔ Dubai",
     title: "Here’s the situation.",
-    message: "Brisbane to Dubai.\nDifferent time zones.\nStill us.",
+    message:
+      "I’m sorry I won’t be with you on Valentine’s Day.\n\nBrisbane to Dubai.\nDifferent time zones.\nStill us.",
     image: "sebjas1.jpg",
     mode: "next",
   },
@@ -67,7 +73,7 @@ const frames = [
     eyebrow: "This part matters",
     title: "Just to be clear:",
     message:
-      "This isn’t about one dinner\nor one night.\nIt’s about choosing you —\nDubai to Brisbane included.",
+      "This isn’t about one dinner\nor one night.\nIt’s about choosing you,\nDubai to Brisbane included.",
     image: "sebjas5.jpg",
     mode: "next",
   },
@@ -95,7 +101,7 @@ const frames = [
 
   {
     eyebrow: "Final question",
-    title: "So —",
+    title: "So",
     message: "Will you be my Valentine?",
     image: null,
     mode: "question",
@@ -114,13 +120,11 @@ function render() {
 
     const src = `public/images/${f.image}?v=${ASSET_VERSION}&step=${step}`;
 
-    // If the image fails, make it obvious (no silent “stuck” image)
     photo.onerror = () => {
       photoWrap.classList.remove("show");
       message.textContent = `Could not load image: ${f.image}`;
     };
 
-    // Hard reset then set
     photo.src = "";
     photo.src = src;
     photo.alt = `Seb & Jasmine ${f.image}`;
@@ -175,6 +179,7 @@ primaryBtn.addEventListener("click", async () => {
   }
 
   if (f.mode === "question") {
+    // End the journey here
     primaryBtn.textContent = "❤️";
     primaryBtn.disabled = true;
     secondaryBtn.style.display = "none";
