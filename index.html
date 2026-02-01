@@ -6,7 +6,7 @@
     <title>Jasmine ❤️</title>
 
     <!-- Cache-busted CSS -->
-    <link rel="stylesheet" href="public/css/style.css?v=1000" />
+    <link rel="stylesheet" href="public/css/style.css?v=1002" />
   </head>
 
   <body>
@@ -16,7 +16,7 @@
 
         <h1 class="title" id="title">Dear Jasmine,</h1>
 
-        <!-- This content is immediately replaced by app.js on load -->
+        <!-- This text is immediately replaced by app.js -->
         <p class="message" id="message">
           People say, “If he wanted to, he would.”<br /><br />
           So I built you a website.
@@ -40,13 +40,13 @@
       </section>
     </main>
 
-    <!-- Background music (starts on Enter click, controlled by app.js) -->
+    <!-- Background music (started via user interaction in app.js) -->
     <audio id="bgMusic" preload="auto" loop>
       <source src="public/audio/music.mp3" type="audio/mpeg" />
     </audio>
 
-    <!-- IMPORTANT: only load app.js -->
-    <!-- Cache-busted so new copy + images always show -->
-    <script src="public/js/app.js?v=1000"></script>
+    <!-- IMPORTANT: load ONLY app.js -->
+    <!-- Cache-busted so copy + images always refresh -->
+    <script src="public/js/app.js?v=1002"></script>
   </body>
 </html>
