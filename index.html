@@ -4,115 +4,38 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jasmine ❤️</title>
-    <link rel="stylesheet" href="public/css/style.css?v=1" />
+    <link rel="stylesheet" href="public/css/style.css" />
   </head>
 
   <body>
     <main class="bg">
-      <!-- LANDING (ONLY this should show first) -->
-      <section class="card" id="landing">
-        <h1>Dear Jasmine,</h1>
-        <p class="subtitle">I made something for you.</p>
+      <section class="card" id="card">
+        <p class="eyebrow" id="eyebrow">For Jasmine</p>
 
-        <div class="actions">
-          <button id="enterBtn" class="btn primary" type="button">Enter</button>
-        </div>
+        <h1 class="title" id="title">Dear Jasmine,</h1>
 
-        <p class="small">Seb Porter</p>
-      </section>
-
-      <!-- VALENTINE (hidden until Enter) -->
-      <section class="card hidden" id="valentine">
-        <h1>Will you be my Valentine?</h1>
-        <p class="subtitle">Choose wisely.</p>
-
-        <div class="actions">
-          <button id="yesBtn" class="btn primary" type="button">Yes</button>
-          <button id="noBtn" class="btn" type="button">No</button>
-        </div>
-
-        <p class="small">Seb Porter</p>
-      </section>
-
-      <!-- YES (hidden until Yes clicked) -->
-      <section class="card hidden" id="yes">
-        <h1>Correct answer.</h1>
-        <p class="subtitle">
-          Looking forward to the rest of our lives together, babygirl.
+        <p class="message" id="message">
+          I know we’re not in the same place right now.
         </p>
 
-        <div class="actions">
-          <button id="backBtn" class="btn primary" type="button">Back</button>
+        <div class="photoWrap" id="photoWrap" aria-hidden="true">
+          <img class="photo" id="photo" src="" alt="" />
         </div>
 
-        <p class="small">Seb Porter</p>
+        <div class="actions" id="actions">
+          <button class="btn primary" id="primaryBtn" type="button">Enter</button>
+          <button class="btn" id="secondaryBtn" type="button">No</button>
+        </div>
+
+        <p class="small" id="small">Seb Porter</p>
       </section>
     </main>
 
-    <!-- Audio -->
+    <!-- Music (starts on Enter click) -->
     <audio id="bgMusic" preload="auto" loop>
       <source src="public/audio/music.mp3" type="audio/mpeg" />
     </audio>
 
-    <script>
-      const music = document.getElementById("bgMusic");
-      let musicStarted = false;
-
-      const sections = {
-        landing: document.getElementById("landing"),
-        valentine: document.getElementById("valentine"),
-        yes: document.getElementById("yes"),
-      };
-
-      function showOnly(which) {
-        Object.keys(sections).forEach((k) => {
-          sections[k].classList.toggle("hidden", k !== which);
-        });
-      }
-
-      function routeFromHash() {
-        const hash = (location.hash || "#landing").replace("#", "");
-        showOnly(sections[hash] ? hash : "landing");
-      }
-
-      async function startMusicOnce() {
-        if (musicStarted) return;
-        musicStarted = true;
-        try {
-          music.volume = 0.7;
-          await music.play();
-        } catch (e) {
-          musicStarted = false;
-        }
-      }
-
-      // Buttons
-      document.getElementById("enterBtn").addEventListener("click", async () => {
-        await startMusicOnce();
-        location.hash = "#valentine";
-      });
-
-      document.getElementById("yesBtn").addEventListener("click", () => {
-        location.hash = "#yes";
-      });
-
-      document.getElementById("backBtn").addEventListener("click", () => {
-        location.hash = "#valentine";
-      });
-
-      // No button dodges
-      const noBtn = document.getElementById("noBtn");
-      function dodge() {
-        const dx = Math.random() * 260 - 130;
-        const dy = Math.random() * 200 - 100;
-        noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
-      }
-      noBtn.addEventListener("pointerenter", dodge);
-      noBtn.addEventListener("pointerdown", dodge);
-
-      // Initial route
-      window.addEventListener("hashchange", routeFromHash);
-      routeFromHash();
-    </script>
+    <script src="public/js/app.js"></script>
   </body>
 </html>
