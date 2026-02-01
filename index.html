@@ -9,31 +9,107 @@
 
   <body>
     <main class="bg">
-      <section class="card">
+      <!-- LANDING SCREEN -->
+      <section class="card" id="screen-landing">
         <h1>Dear Jasmine,</h1>
         <p class="subtitle">I made something for you.</p>
 
         <div class="actions">
-          <button id="enterBtn" class="btn primary" type="button">
-            Enter
-          </button>
+          <button id="enterBtn" class="btn primary" type="button">Enter</button>
+        </div>
+
+        <p class="small">Seb Porter</p>
+      </section>
+
+      <!-- QUESTION SCREEN -->
+      <section class="card hidden" id="screen-question">
+        <h1>Will you be my Valentine?</h1>
+        <p class="subtitle">Choose wisely.</p>
+
+        <div class="actions">
+          <button id="yesBtn" class="btn primary" type="button">Yes</button>
+          <button id="noBtn" class="btn" type="button">No</button>
+        </div>
+
+        <p class="small">Seb Porter</p>
+      </section>
+
+      <!-- YES SCREEN -->
+      <section class="card hidden" id="screen-yes">
+        <h1>Correct answer.</h1>
+        <p class="subtitle">
+          Looking forward to the rest of our lives together, babygirl.
+        </p>
+
+        <div class="actions">
+          <button id="backBtn" class="btn primary" type="button">Back</button>
         </div>
 
         <p class="small">Seb Porter</p>
       </section>
     </main>
 
-    <!-- Background music -->
-    <script src="public/js/music.js"></script>
-    <script>
-      const enterBtn = document.getElementById("enterBtn");
+    <!-- Audio element -->
+    <audio id="bgMusic" preload="auto" loop>
+      <source src="public/audio/music.mp3" type="audio/mpeg" />
+    </audio>
 
-      enterBtn.addEventListener("click", () => {
-        // Start music on first user interaction
-        window.startValentineMusic();
-        // Navigate to next page
-        window.location.href = "valentine.html";
+    <script>
+      const landing = document.getElementById("screen-landing");
+      const question = document.getElementById("screen-question");
+      const yesScreen = document.getElementById("screen-yes");
+
+      const enterBtn = document.getElementById("enterBtn");
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+      const backBtn = document.getElementById("backBtn");
+
+      const music = document.getElementById("bgMusic");
+      let musicStarted = false;
+
+      function show(el) { el.classList.remove("hidden"); }
+      function hide(el) { el.classList.add("hidden"); }
+
+      async function startMusicOnce() {
+        if (musicStarted) return;          // hard guard
+        if (!music.paused) {               // already playing guard
+          musicStarted = true;
+          return;
+        }
+        musicStarted = true;
+        try {
+          music.volume = 0.7;
+          await music.play();
+        } catch (e) {
+          // If it fails on some devices, user can tap Enter again.
+          musicStarted = false;
+        }
+      }
+
+      enterBtn.addEventListener("click", async () => {
+        await startMusicOnce();
+        hide(landing);
+        show(question);
       });
+
+      yesBtn.addEventListener("click", () => {
+        hide(question);
+        show(yesScreen);
+      });
+
+      backBtn.addEventListener("click", () => {
+        hide(yesScreen);
+        show(question);
+      });
+
+      function dodge() {
+        const dx = Math.random() * 260 - 130;
+        const dy = Math.random() * 200 - 100;
+        noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+      }
+
+      noBtn.addEventListener("pointerenter", dodge);
+      noBtn.addEventListener("pointerdown", dodge);
     </script>
   </body>
 </html>
