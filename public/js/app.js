@@ -12,8 +12,8 @@ const secondaryBtn = document.getElementById("secondaryBtn");
 
 const music = document.getElementById("bgMusic");
 
-// Change this any time you replace images but keep the same filenames
-const ASSET_VERSION = "20260201-2";
+// Bump this whenever you replace images but keep the same filenames
+const ASSET_VERSION = "20260201-3";
 
 let musicStarted = false;
 let step = 0;
@@ -26,11 +26,6 @@ function setMultiline(el, text) {
   });
 }
 
-/*
-  step 0  = landing (no image)
-  step 1–8 = sebjas1.jpg → sebjas8.jpg
-  step 9  = final question (no image) — should show "Yes" + "No"
-*/
 const frames = [
   {
     eyebrow: "For Jasmine",
@@ -73,7 +68,7 @@ const frames = [
     eyebrow: "This part matters",
     title: "Just to be clear:",
     message:
-      "This isn’t about one dinner\nor one night.\nIt’s about choosing you,\nDubai to Brisbane included.",
+      "This isn’t about one dinner\nor one night.\nIt’s about choosing you.",
     image: "sebjas5.jpg",
     mode: "next",
   },
@@ -179,7 +174,6 @@ primaryBtn.addEventListener("click", async () => {
   }
 
   if (f.mode === "question") {
-    // End the journey here
     primaryBtn.textContent = "❤️";
     primaryBtn.disabled = true;
     secondaryBtn.style.display = "none";
