@@ -3,42 +3,84 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Will You Be My Valentine?</title>
+    <title>Jasmine 💘</title>
     <link rel="stylesheet" href="public/css/style.css" />
   </head>
 
   <body>
-    <!-- Full bleed hero image -->
-    <div class="hero">
-      <img
-        id="banner"
-        src="public/images/cover.jpg"
-        alt="Jasmine & Seb"
-      />
-    </div>
+    <!-- Full-screen background -->
+    <div class="bg" aria-hidden="true"></div>
+    <div class="overlay" aria-hidden="true"></div>
 
-    <!-- Main content -->
-    <div class="container">
-      <h1 id="question-heading">
-        Jasmine, will you be my Valentine?
-      </h1>
+    <main class="wrap">
+      <section class="card">
+        <p class="eyebrow">An invitation for</p>
+        <h1 class="title">Jasmine</h1>
+        <p class="subtitle">Will you be my Valentine?</p>
 
-      <div class="buttons">
-        <button id="yes-button"><p>Yes</p></button>
-        <button id="no-button"><p>No</p></button>
-      </div>
+        <div class="details">
+          <div class="detail">
+            <span class="label">When</span>
+            <span class="value">This week (pick your day)</span>
+          </div>
+          <div class="detail">
+            <span class="label">Dress code</span>
+            <span class="value">Whatever makes you feel dangerous</span>
+          </div>
+          <div class="detail">
+            <span class="label">Mission</span>
+            <span class="value">Say yes. I handle the rest.</span>
+          </div>
+        </div>
 
-      <div class="message">
-        <h2 id="success-message">
-          Right answer, looking forward to the rest of our lives together babygirl
-        </h2>
+        <div class="actions">
+          <button id="yesBtn" class="btn primary" type="button">Yes</button>
+          <button id="noBtn" class="btn ghost" type="button">No</button>
+        </div>
 
-        <h6>
-          Creator: <span class="creator">Seb Porter</span>
-        </h6>
-      </div>
-    </div>
+        <p class="fineprint">Creator: <span class="creator">Seb Porter</span></p>
+      </section>
 
-    <script src="public/js/script.js"></script>
+      <!-- Success modal -->
+      <section class="modal" id="modal" aria-hidden="true">
+        <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+          <h2 id="modalTitle">Correct answer.</h2>
+          <p class="modalText">
+            Looking forward to the rest of our lives together, babygirl.
+          </p>
+
+          <div class="modalActions">
+            <button id="closeBtn" class="btn primary" type="button">Close</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+      const modal = document.getElementById("modal");
+      const closeBtn = document.getElementById("closeBtn");
+
+      yesBtn.addEventListener("click", () => {
+        modal.classList.add("show");
+        modal.setAttribute("aria-hidden", "false");
+      });
+
+      closeBtn.addEventListener("click", () => {
+        modal.classList.remove("show");
+        modal.setAttribute("aria-hidden", "true");
+      });
+
+      // “No” gently refuses to cooperate (mobile-friendly: uses pointerdown)
+      function dodge() {
+        const dx = Math.random() * 260 - 130;
+        const dy = Math.random() * 200 - 100;
+        noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
+      }
+
+      noBtn.addEventListener("pointerenter", dodge);
+      noBtn.addEventListener("pointerdown", dodge);
+    </script>
   </body>
 </html>
