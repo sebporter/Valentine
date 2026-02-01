@@ -12,8 +12,8 @@ const secondaryBtn = document.getElementById("secondaryBtn");
 
 const music = document.getElementById("bgMusic");
 
-// Bump this whenever you replace images but keep the same filenames
-const ASSET_VERSION = "20260201-3";
+// Bump this whenever you delete/re-upload images using the same filenames
+const ASSET_VERSION = "20260201-4";
 
 let musicStarted = false;
 let step = 0;
@@ -26,6 +26,11 @@ function setMultiline(el, text) {
   });
 }
 
+/*
+  step 0  = landing (no image)
+  step 1–8 = sebjas1.jpg → sebjas8.jpg
+  step 9  = final question (no image)
+*/
 const frames = [
   {
     eyebrow: "For Jasmine",
@@ -67,8 +72,7 @@ const frames = [
   {
     eyebrow: "This part matters",
     title: "Just to be clear:",
-    message:
-      "This isn’t about one dinner\nor one night.\nIt’s about choosing you.",
+    message: "This isn’t about one dinner\nor one night.\nIt’s about choosing you.",
     image: "sebjas5.jpg",
     mode: "next",
   },
@@ -110,16 +114,27 @@ function render() {
   title.textContent = f.title;
   setMultiline(message, f.message);
 
+  // Clear previous handlers so old errors can't fire later
+  photo.onerror = null;
+
   if (f.image) {
     photoWrap.classList.add("show");
+
+    // Tokenize the request so late errors don't overwrite later frames
+    const requestStep = step;
+    const requestImage = f.image;
 
     const src = `public/images/${f.image}?v=${ASSET_VERSION}&step=${step}`;
 
     photo.onerror = () => {
+      // Only show the error if we're still on the same step
+      if (step !== requestStep) return;
+
       photoWrap.classList.remove("show");
-      message.textContent = `Could not load image: ${f.image}`;
+      message.textContent = `Could not load image: ${requestImage}`;
     };
 
+    // Hard reset then set
     photo.src = "";
     photo.src = src;
     photo.alt = `Seb & Jasmine ${f.image}`;
@@ -174,6 +189,7 @@ primaryBtn.addEventListener("click", async () => {
   }
 
   if (f.mode === "question") {
+    // End here
     primaryBtn.textContent = "❤️";
     primaryBtn.disabled = true;
     secondaryBtn.style.display = "none";
