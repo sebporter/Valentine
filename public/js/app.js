@@ -12,6 +12,9 @@ const secondaryBtn = document.getElementById("secondaryBtn");
 
 const music = document.getElementById("bgMusic");
 
+// Change this ANY TIME you re-upload images with the same filenames
+const ASSET_VERSION = "20260201-1";
+
 let musicStarted = false;
 let step = 0;
 
@@ -23,11 +26,6 @@ function setMultiline(el, text) {
   });
 }
 
-/*
-  step 0  = landing (no image)
-  step 1–8 = sebjas1.jpg → sebjas8.jpg
-  step 9  = final question (no image) — journey ends here
-*/
 const frames = [
   {
     eyebrow: "For Jasmine",
@@ -114,9 +112,17 @@ function render() {
   if (f.image) {
     photoWrap.classList.add("show");
 
-    // Force refresh per step so browser can’t “stick” to one image
+    const src = `public/images/${f.image}?v=${ASSET_VERSION}&step=${step}`;
+
+    // If the image fails, make it obvious (no silent “stuck” image)
+    photo.onerror = () => {
+      photoWrap.classList.remove("show");
+      message.textContent = `Could not load image: ${f.image}`;
+    };
+
+    // Hard reset then set
     photo.src = "";
-    photo.src = `public/images/${f.image}?step=${step}`;
+    photo.src = src;
     photo.alt = `Seb & Jasmine ${f.image}`;
   } else {
     photoWrap.classList.remove("show");
@@ -169,7 +175,6 @@ primaryBtn.addEventListener("click", async () => {
   }
 
   if (f.mode === "question") {
-    // End journey here
     primaryBtn.textContent = "❤️";
     primaryBtn.disabled = true;
     secondaryBtn.style.display = "none";
