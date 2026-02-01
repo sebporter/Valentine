@@ -15,27 +15,27 @@ const music = document.getElementById("bgMusic");
 let musicStarted = false;
 let step = 0;
 
-// Helper: render multiline text nicely
+/* ---------- Helper ---------- */
 function setMultiline(el, text) {
   el.innerHTML = "";
-  String(text)
-    .split("\n")
-    .forEach((line, i, arr) => {
-      el.appendChild(document.createTextNode(line));
-      if (i < arr.length - 1) el.appendChild(document.createElement("br"));
-    });
+  String(text).split("\n").forEach((line, i, arr) => {
+    el.appendChild(document.createTextNode(line));
+    if (i < arr.length - 1) el.appendChild(document.createElement("br"));
+  });
 }
 
-// Frames: 0 = landing (no image)
-// Frames 1..8 = image frames (sebjas1..sebjas8)
-// Frame 9 = final question (no image) - journey ends there
+/* ---------- Frames ---------- */
+/*
+  step 0  = landing (no image)
+  step 1–8 = sebjas1.jpg → sebjas8.jpg
+  step 9  = final question (no image)
+*/
 const frames = [
   {
     eyebrow: "For Jasmine",
     title: "Dear Jasmine,",
     message: "I know we’re not in the same place right now.",
     image: null,
-    primaryText: "Enter",
     mode: "enter",
   },
 
@@ -44,7 +44,6 @@ const frames = [
     title: "Okay, listen…",
     message: "Brisbane to Dubai.\nDifferent skies.\nSame us.",
     image: "sebjas1.jpg",
-    primaryText: "Keep going",
     mode: "next",
   },
   {
@@ -53,7 +52,6 @@ const frames = [
     message:
       "Valentine’s Day still counts,\neven when we’re on opposite sides of the world.",
     image: "sebjas2.jpg",
-    primaryText: "Keep going",
     mode: "next",
   },
   {
@@ -62,7 +60,6 @@ const frames = [
     message:
       "The small things.\nYour laugh.\nThe way you make ordinary days lighter.",
     image: "sebjas3.jpg",
-    primaryText: "Keep going",
     mode: "next",
   },
   {
@@ -70,7 +67,6 @@ const frames = [
     title: "Even with distance…",
     message: "You still feel close in all the ways that matter.",
     image: "sebjas4.jpg",
-    primaryText: "Keep going",
     mode: "next",
   },
   {
@@ -79,7 +75,6 @@ const frames = [
     message:
       "This isn’t about one dinner or one night.\nIt’s about choosing you,\nfrom Dubai to Brisbane.",
     image: "sebjas5.jpg",
-    primaryText: "Keep going",
     mode: "next",
   },
   {
@@ -87,7 +82,6 @@ const frames = [
     title: "If teleporting existed…",
     message: "I’d be in Brisbane.\nRight now.\nNo hesitation.",
     image: "sebjas6.jpg",
-    primaryText: "Keep going",
     mode: "next",
   },
   {
@@ -95,7 +89,6 @@ const frames = [
     title: "So this is me,",
     message: "Making the distance feel smaller,\none click at a time.",
     image: "sebjas7.jpg",
-    primaryText: "Keep going",
     mode: "next",
   },
   {
@@ -103,7 +96,6 @@ const frames = [
     title: "Proof, really…",
     message: "We’re worth the wait.\nAlways.",
     image: "sebjas8.jpg",
-    primaryText: "Keep going",
     mode: "next",
   },
 
@@ -112,11 +104,11 @@ const frames = [
     title: "So…",
     message: "Will you be my Valentine?",
     image: null,
-    primaryText: "Yes",
     mode: "question",
   },
 ];
 
+/* ---------- Render ---------- */
 function render() {
   const f = frames[step];
 
@@ -124,12 +116,13 @@ function render() {
   title.textContent = f.title;
   setMultiline(message, f.message);
 
-  // IMAGE: always update per step
+  // Image handling — FORCE refresh per step
   if (f.image) {
     photoWrap.classList.add("show");
 
-    // Force refresh image per step (avoids browser reusing old cached image)
-    photo.src = `public/images/${f.image}?v=${step}`;
+    // Hard reset to prevent browser reuse
+    photo.src = "";
+    photo.src = `public/images/${f.image}?step=${step}`;
     photo.alt = `Seb & Jasmine ${f.image}`;
   } else {
     photoWrap.classList.remove("show");
@@ -144,13 +137,16 @@ function render() {
     secondaryBtn.textContent = "No";
     secondaryBtn.style.transform = "";
     primaryBtn.disabled = false;
-  } else {
-    primaryBtn.textContent = f.primaryText;
+  } else if (f.mode === "enter") {
+    primaryBtn.textContent = "Enter";
     secondaryBtn.style.display = "none";
-    primaryBtn.disabled = false;
+  } else {
+    primaryBtn.textContent = "Keep going";
+    secondaryBtn.style.display = "none";
   }
 }
 
+/* ---------- Music ---------- */
 async function startMusicOnce() {
   if (musicStarted) return;
   musicStarted = true;
@@ -162,6 +158,7 @@ async function startMusicOnce() {
   }
 }
 
+/* ---------- Button logic ---------- */
 primaryBtn.addEventListener("click", async () => {
   const f = frames[step];
 
@@ -179,13 +176,14 @@ primaryBtn.addEventListener("click", async () => {
   }
 
   if (f.mode === "question") {
-    // End here as requested
+    // End journey here
     primaryBtn.textContent = "❤️";
     primaryBtn.disabled = true;
     secondaryBtn.style.display = "none";
   }
 });
 
+/* ---------- No button dodge ---------- */
 function dodgeNo() {
   const dx = Math.random() * 260 - 130;
   const dy = Math.random() * 180 - 90;
@@ -195,5 +193,5 @@ function dodgeNo() {
 secondaryBtn.addEventListener("pointerenter", dodgeNo);
 secondaryBtn.addEventListener("pointerdown", dodgeNo);
 
-// Initial render
+/* ---------- Init ---------- */
 render();
