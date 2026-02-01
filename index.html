@@ -18,6 +18,7 @@
           I know we’re not in the same place right now.
         </p>
 
+        <!-- Image shown for frames 1..8 -->
         <div class="photoWrap" id="photoWrap" aria-hidden="true">
           <img class="photo" id="photo" src="" alt="" />
         </div>
@@ -31,11 +32,12 @@
       </section>
     </main>
 
-    <!-- Music (starts on Enter click) -->
+    <!-- Music (starts on Enter click; controlled by app.js) -->
     <audio id="bgMusic" preload="auto" loop>
       <source src="public/audio/music.mp3" type="audio/mpeg" />
     </audio>
 
+    <!-- IMPORTANT: only load app.js (do NOT load music.js as well) -->
     <script src="public/js/app.js"></script>
   </body>
 </html>
