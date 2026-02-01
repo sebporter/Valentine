@@ -15,7 +15,6 @@ const music = document.getElementById("bgMusic");
 let musicStarted = false;
 let step = 0;
 
-/* ---------- Helper ---------- */
 function setMultiline(el, text) {
   el.innerHTML = "";
   String(text).split("\n").forEach((line, i, arr) => {
@@ -24,91 +23,87 @@ function setMultiline(el, text) {
   });
 }
 
-/* ---------- Frames ---------- */
 /*
   step 0  = landing (no image)
   step 1–8 = sebjas1.jpg → sebjas8.jpg
-  step 9  = final question (no image)
+  step 9  = final question (no image) — journey ends here
 */
 const frames = [
   {
     eyebrow: "For Jasmine",
     title: "Dear Jasmine,",
-    message: "I know we’re not in the same place right now.",
+    message: 'People say, “If he wanted to, he would.”\n\nSo I built you a website.',
     image: null,
     mode: "enter",
   },
 
   {
     eyebrow: "Brisbane ↔ Dubai",
-    title: "Okay, listen…",
-    message: "Brisbane to Dubai.\nDifferent skies.\nSame us.",
+    title: "Here’s the situation.",
+    message: "Brisbane to Dubai.\nDifferent time zones.\nStill us.",
     image: "sebjas1.jpg",
     mode: "next",
   },
   {
-    eyebrow: "Still counts",
-    title: "Just so we’re clear:",
-    message:
-      "Valentine’s Day still counts,\neven when we’re on opposite sides of the world.",
+    eyebrow: "February 14",
+    title: "About Valentine’s Day:",
+    message: "It doesn’t stop counting\njust because we’re far apart.",
     image: "sebjas2.jpg",
     mode: "next",
   },
   {
-    eyebrow: "The small things",
-    title: "I still think about…",
-    message:
-      "The small things.\nYour laugh.\nThe way you make ordinary days lighter.",
+    eyebrow: "Little things",
+    title: "What sticks with me:",
+    message: "The small stuff.\nYour laugh.\nHow you make normal days better.",
     image: "sebjas3.jpg",
     mode: "next",
   },
   {
-    eyebrow: "Closer than it looks",
-    title: "Even with distance…",
-    message: "You still feel close in all the ways that matter.",
+    eyebrow: "Distance check",
+    title: "Honestly,",
+    message: "Even with the distance,\nyou don’t feel far to me.",
     image: "sebjas4.jpg",
     mode: "next",
   },
   {
-    eyebrow: "Chosen",
-    title: "No big speech.",
+    eyebrow: "This part matters",
+    title: "Just to be clear:",
     message:
-      "This isn’t about one dinner or one night.\nIt’s about choosing you,\nfrom Dubai to Brisbane.",
+      "This isn’t about one dinner\nor one night.\nIt’s about choosing you —\nDubai to Brisbane included.",
     image: "sebjas5.jpg",
     mode: "next",
   },
   {
-    eyebrow: "If I could",
-    title: "If teleporting existed…",
-    message: "I’d be in Brisbane.\nRight now.\nNo hesitation.",
+    eyebrow: "If I’m being honest",
+    title: "Right now,",
+    message: "I wish I could cook you dinner\non Valentine’s Day.",
     image: "sebjas6.jpg",
     mode: "next",
   },
   {
     eyebrow: "Until then",
     title: "So this is me,",
-    message: "Making the distance feel smaller,\none click at a time.",
+    message: "Doing what I can\nto make the distance feel smaller.",
     image: "sebjas7.jpg",
     mode: "next",
   },
   {
-    eyebrow: "One last thing",
-    title: "Proof, really…",
-    message: "We’re worth the wait.\nAlways.",
+    eyebrow: "Before I ask",
+    title: "One thing I know:",
+    message: "We’re worth the wait.",
     image: "sebjas8.jpg",
     mode: "next",
   },
 
   {
     eyebrow: "Final question",
-    title: "So…",
+    title: "So —",
     message: "Will you be my Valentine?",
     image: null,
     mode: "question",
   },
 ];
 
-/* ---------- Render ---------- */
 function render() {
   const f = frames[step];
 
@@ -116,11 +111,10 @@ function render() {
   title.textContent = f.title;
   setMultiline(message, f.message);
 
-  // Image handling — FORCE refresh per step
   if (f.image) {
     photoWrap.classList.add("show");
 
-    // Hard reset to prevent browser reuse
+    // Force refresh per step so browser can’t “stick” to one image
     photo.src = "";
     photo.src = `public/images/${f.image}?step=${step}`;
     photo.alt = `Seb & Jasmine ${f.image}`;
@@ -130,7 +124,6 @@ function render() {
     photo.alt = "";
   }
 
-  // Buttons
   if (f.mode === "question") {
     primaryBtn.textContent = "Yes";
     secondaryBtn.style.display = "inline-flex";
@@ -140,13 +133,14 @@ function render() {
   } else if (f.mode === "enter") {
     primaryBtn.textContent = "Enter";
     secondaryBtn.style.display = "none";
+    primaryBtn.disabled = false;
   } else {
     primaryBtn.textContent = "Keep going";
     secondaryBtn.style.display = "none";
+    primaryBtn.disabled = false;
   }
 }
 
-/* ---------- Music ---------- */
 async function startMusicOnce() {
   if (musicStarted) return;
   musicStarted = true;
@@ -158,7 +152,6 @@ async function startMusicOnce() {
   }
 }
 
-/* ---------- Button logic ---------- */
 primaryBtn.addEventListener("click", async () => {
   const f = frames[step];
 
@@ -183,7 +176,6 @@ primaryBtn.addEventListener("click", async () => {
   }
 });
 
-/* ---------- No button dodge ---------- */
 function dodgeNo() {
   const dx = Math.random() * 260 - 130;
   const dy = Math.random() * 180 - 90;
@@ -193,5 +185,4 @@ function dodgeNo() {
 secondaryBtn.addEventListener("pointerenter", dodgeNo);
 secondaryBtn.addEventListener("pointerdown", dodgeNo);
 
-/* ---------- Init ---------- */
 render();
