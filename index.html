@@ -9,7 +9,7 @@
 
   <body>
     <main class="bg">
-      <!-- LANDING -->
+      <!-- LANDING (ONLY this should show first) -->
       <section class="card" id="landing">
         <h1>Dear Jasmine,</h1>
         <p class="subtitle">I made something for you.</p>
@@ -21,7 +21,7 @@
         <p class="small">Seb Porter</p>
       </section>
 
-      <!-- VALENTINE QUESTION -->
+      <!-- VALENTINE (hidden until Enter) -->
       <section class="card hidden" id="valentine">
         <h1>Will you be my Valentine?</h1>
         <p class="subtitle">Choose wisely.</p>
@@ -34,7 +34,7 @@
         <p class="small">Seb Porter</p>
       </section>
 
-      <!-- YES -->
+      <!-- YES (hidden until Yes clicked) -->
       <section class="card hidden" id="yes">
         <h1>Correct answer.</h1>
         <p class="subtitle">
@@ -49,7 +49,7 @@
       </section>
     </main>
 
-    <!-- AUDIO (seamless because no page reloads) -->
+    <!-- Audio -->
     <audio id="bgMusic" preload="auto" loop>
       <source src="public/audio/music.mp3" type="audio/mpeg" />
     </audio>
@@ -72,8 +72,7 @@
 
       function routeFromHash() {
         const hash = (location.hash || "#landing").replace("#", "");
-        if (sections[hash]) showOnly(hash);
-        else showOnly("landing");
+        showOnly(sections[hash] ? hash : "landing");
       }
 
       async function startMusicOnce() {
@@ -83,7 +82,6 @@
           music.volume = 0.7;
           await music.play();
         } catch (e) {
-          // If play fails, we’ll try again on next user click.
           musicStarted = false;
         }
       }
@@ -102,6 +100,7 @@
         location.hash = "#valentine";
       });
 
+      // No button dodges
       const noBtn = document.getElementById("noBtn");
       function dodge() {
         const dx = Math.random() * 260 - 130;
@@ -111,7 +110,7 @@
       noBtn.addEventListener("pointerenter", dodge);
       noBtn.addEventListener("pointerdown", dodge);
 
-      // Routing
+      // Initial route
       window.addEventListener("hashchange", routeFromHash);
       routeFromHash();
     </script>
