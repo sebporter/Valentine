@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jasmine ❤️</title>
-    <link rel="stylesheet" href="public/css/style.css" />
+    <link rel="stylesheet" href="public/css/style.css?v=1" />
   </head>
 
   <body>
     <main class="bg">
-      <!-- LANDING SCREEN -->
-      <section class="card" id="screen-landing">
+      <!-- LANDING -->
+      <section class="card" id="landing">
         <h1>Dear Jasmine,</h1>
         <p class="subtitle">I made something for you.</p>
 
@@ -21,8 +21,8 @@
         <p class="small">Seb Porter</p>
       </section>
 
-      <!-- QUESTION SCREEN -->
-      <section class="card hidden" id="screen-question">
+      <!-- VALENTINE QUESTION -->
+      <section class="card hidden" id="valentine">
         <h1>Will you be my Valentine?</h1>
         <p class="subtitle">Choose wisely.</p>
 
@@ -34,8 +34,8 @@
         <p class="small">Seb Porter</p>
       </section>
 
-      <!-- YES SCREEN -->
-      <section class="card hidden" id="screen-yes">
+      <!-- YES -->
+      <section class="card hidden" id="yes">
         <h1>Correct answer.</h1>
         <p class="subtitle">
           Looking forward to the rest of our lives together, babygirl.
@@ -49,67 +49,71 @@
       </section>
     </main>
 
-    <!-- Audio element -->
+    <!-- AUDIO (seamless because no page reloads) -->
     <audio id="bgMusic" preload="auto" loop>
       <source src="public/audio/music.mp3" type="audio/mpeg" />
     </audio>
 
     <script>
-      const landing = document.getElementById("screen-landing");
-      const question = document.getElementById("screen-question");
-      const yesScreen = document.getElementById("screen-yes");
-
-      const enterBtn = document.getElementById("enterBtn");
-      const yesBtn = document.getElementById("yesBtn");
-      const noBtn = document.getElementById("noBtn");
-      const backBtn = document.getElementById("backBtn");
-
       const music = document.getElementById("bgMusic");
       let musicStarted = false;
 
-      function show(el) { el.classList.remove("hidden"); }
-      function hide(el) { el.classList.add("hidden"); }
+      const sections = {
+        landing: document.getElementById("landing"),
+        valentine: document.getElementById("valentine"),
+        yes: document.getElementById("yes"),
+      };
+
+      function showOnly(which) {
+        Object.keys(sections).forEach((k) => {
+          sections[k].classList.toggle("hidden", k !== which);
+        });
+      }
+
+      function routeFromHash() {
+        const hash = (location.hash || "#landing").replace("#", "");
+        if (sections[hash]) showOnly(hash);
+        else showOnly("landing");
+      }
 
       async function startMusicOnce() {
-        if (musicStarted) return;          // hard guard
-        if (!music.paused) {               // already playing guard
-          musicStarted = true;
-          return;
-        }
+        if (musicStarted) return;
         musicStarted = true;
         try {
           music.volume = 0.7;
           await music.play();
         } catch (e) {
-          // If it fails on some devices, user can tap Enter again.
+          // If play fails, we’ll try again on next user click.
           musicStarted = false;
         }
       }
 
-      enterBtn.addEventListener("click", async () => {
+      // Buttons
+      document.getElementById("enterBtn").addEventListener("click", async () => {
         await startMusicOnce();
-        hide(landing);
-        show(question);
+        location.hash = "#valentine";
       });
 
-      yesBtn.addEventListener("click", () => {
-        hide(question);
-        show(yesScreen);
+      document.getElementById("yesBtn").addEventListener("click", () => {
+        location.hash = "#yes";
       });
 
-      backBtn.addEventListener("click", () => {
-        hide(yesScreen);
-        show(question);
+      document.getElementById("backBtn").addEventListener("click", () => {
+        location.hash = "#valentine";
       });
 
+      const noBtn = document.getElementById("noBtn");
       function dodge() {
         const dx = Math.random() * 260 - 130;
         const dy = Math.random() * 200 - 100;
         noBtn.style.transform = `translate(${dx}px, ${dy}px)`;
       }
-
       noBtn.addEventListener("pointerenter", dodge);
       noBtn.addEventListener("pointerdown", dodge);
+
+      // Routing
+      window.addEventListener("hashchange", routeFromHash);
+      routeFromHash();
     </script>
   </body>
 </html>
