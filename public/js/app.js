@@ -13,7 +13,7 @@ const secondaryBtn = document.getElementById("secondaryBtn");
 const music = document.getElementById("bgMusic");
 
 // Bump this whenever you delete/re-upload images using the same filenames
-const ASSET_VERSION = "20260201-4";
+const ASSET_VERSION = "20260201-5";
 
 let musicStarted = false;
 let step = 0;
@@ -29,7 +29,7 @@ function setMultiline(el, text) {
 /*
   step 0  = landing (no image)
   step 1–8 = sebjas1.jpg → sebjas8.jpg
-  step 9  = final question (no image)
+  step 9  = final question (NO image)
 */
 const frames = [
   {
@@ -94,7 +94,7 @@ const frames = [
     eyebrow: "Before I ask",
     title: "One thing I know:",
     message: "We’re worth the wait.",
-    image: "sebjas8.jpg",
+    image: "sebjas8.jpg", // ONLY here
     mode: "next",
   },
 
@@ -102,7 +102,7 @@ const frames = [
     eyebrow: "Final question",
     title: "So",
     message: "Will you be my Valentine?",
-    image: null,
+    image: null, // IMPORTANT: no image on final frame
     mode: "question",
   },
 ];
@@ -120,25 +120,21 @@ function render() {
   if (f.image) {
     photoWrap.classList.add("show");
 
-    // Tokenize the request so late errors don't overwrite later frames
     const requestStep = step;
     const requestImage = f.image;
-
     const src = `public/images/${f.image}?v=${ASSET_VERSION}&step=${step}`;
 
     photo.onerror = () => {
-      // Only show the error if we're still on the same step
       if (step !== requestStep) return;
-
       photoWrap.classList.remove("show");
       message.textContent = `Could not load image: ${requestImage}`;
     };
 
-    // Hard reset then set
     photo.src = "";
     photo.src = src;
     photo.alt = `Seb & Jasmine ${f.image}`;
   } else {
+    // Final frame and landing: hide image cleanly
     photoWrap.classList.remove("show");
     photo.src = "";
     photo.alt = "";
@@ -189,7 +185,6 @@ primaryBtn.addEventListener("click", async () => {
   }
 
   if (f.mode === "question") {
-    // End here
     primaryBtn.textContent = "❤️";
     primaryBtn.disabled = true;
     secondaryBtn.style.display = "none";
